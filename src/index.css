@@ -1,11 +1,22 @@
+/**
+ * index.css - Estilos Globales Base
+ * 
+ * Principios aplicados:
+ * #4: Consistencia Visual - Sistema de diseño unificado
+ * #5: Accesibilidad - Fuentes, contraste, responsive
+ */
+
+/* Importar variables CSS del sistema de diseño */
+@import './styles/components.css';
+
 :root {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: dark;
-  color: #ffffff;
-  background-color: #000000;
+  color: var(--text-primary, #ffffff);
+  background-color: var(--bg-primary, #000000);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,70 +24,182 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Enlaces - Principio #8: Affordances Claras */
 a {
   font-weight: 500;
-  color: #ffffff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #cccccc;
+  color: var(--primary-color, #3b82f6);
+  text-decoration: none;
+  transition: color var(--transition-fast, 0.15s ease);
 }
 
+a:hover {
+  color: var(--primary-hover, #2563eb);
+  text-decoration: underline;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--primary-color, #3b82f6);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm, 4px);
+}
+
+/* Body - Estructura base */
 body {
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background: #000000;
-  color: #ffffff;
+  background: var(--bg-primary, #000000);
+  color: var(--text-primary, #ffffff);
+  transition: opacity var(--transition-normal, 0.3s ease);
 }
 
+/* Tipografía */
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
-  color: #000000;
+  color: var(--text-primary, #ffffff);
+  font-weight: var(--font-weight-light, 300);
 }
 
+h2 {
+  font-size: 2em;
+  line-height: 1.2;
+  color: var(--text-primary, #ffffff);
+  font-weight: var(--font-weight-normal, 400);
+}
+
+h3 {
+  font-size: 1.5em;
+  line-height: 1.3;
+  color: var(--text-primary, #ffffff);
+  font-weight: var(--font-weight-medium, 500);
+}
+
+p {
+  line-height: 1.6;
+  color: var(--text-secondary, #cccccc);
+}
+
+/* Botones - Principio #8: Affordances Claras y #9: Estados Interactivos */
 button {
-  border-radius: 4px;
-  border: 1px solid #e9ecef;
+  border-radius: var(--radius-sm, 4px);
+  border: 1px solid var(--border-color, #333333);
   padding: 0.5em 1em;
   font-size: 0.9em;
-  font-weight: 400;
+  font-weight: var(--font-weight-normal, 400);
   font-family: inherit;
-  background-color: #ffffff;
-  color: #000000;
+  background-color: var(--bg-secondary, #111111);
+  color: var(--text-primary, #ffffff);
   cursor: pointer;
-  transition: all 0.2s;
-}
-button:hover {
-  background-color: #f8f9fa;
-  border-color: #28a745;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: all var(--transition-fast, 0.2s ease);
 }
 
+button:hover {
+  background-color: var(--bg-hover, #222222);
+  border-color: var(--border-hover, #444444);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--primary-color, #3b82f6);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+button:disabled:hover {
+  background-color: var(--bg-secondary, #111111);
+  border-color: var(--border-color, #333333);
+  transform: none;
+}
+
+/* Root container */
 #root {
   width: 100%;
   margin: 0;
   text-align: left;
-  background: #000000;
-  color: #ffffff;
+  background: var(--bg-primary, #000000);
+  color: var(--text-primary, #ffffff);
 }
 
+/* Scrollbar personalizada - Mejora visual */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary, #111111);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color, #333333);
+  border-radius: var(--radius-sm, 4px);
+  transition: background var(--transition-fast, 0.15s ease);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover, #444444);
+}
+
+/* Selection - Marca de texto */
+::selection {
+  background: var(--primary-color, #3b82f6);
+  color: var(--text-primary, #ffffff);
+}
+
+::-moz-selection {
+  background: var(--primary-color, #3b82f6);
+  color: var(--text-primary, #ffffff);
+}
+
+/* Modo oscuro forzado - ya está en dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
-    color: #ffffff;
-    background-color: #000000;
+    color: var(--text-primary, #ffffff);
+    background-color: var(--bg-primary, #000000);
   }
-  a:hover {
-    color: #cccccc;
+}
+
+/* Responsive - Principio #5: Accesibilidad */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2em;
   }
+
+  h2 {
+    font-size: 1.5em;
+  }
+
+  h3 {
+    font-size: 1.2em;
+  }
+
   button {
-    background-color: #333333;
-    color: #ffffff;
+    padding: 0.6em 1.2em;
+  }
+}
+
+/* Reducir animaciones - Principio #5: Accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

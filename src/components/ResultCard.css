@@ -1,0 +1,406 @@
+/**
+ * ResultCard Styles
+ * 
+ * Principios aplicados:
+ * #4: Consistencia Visual - Uso de variables CSS
+ * #8: Affordances Claras - Estados hover interactivos
+ * #9: Mejoras en UX - Transiciones suaves
+ * #10: Jerarquía Visual Clara
+ */
+
+.result-card {
+  padding: var(--spacing-lg, 1.5rem);
+  margin: var(--spacing-md, 1rem) 0;
+  border-radius: var(--radius-lg, 12px);
+  background: var(--bg-secondary, #111111);
+  border: 1px solid var(--border-color, #333333);
+  transition: all var(--transition-normal, 0.3s ease);
+  position: relative;
+  overflow: hidden;
+  animation: slideInUp 0.4s ease forwards;
+  opacity: 0;
+}
+
+/* Estados Hover - Principio #8: Affordances Claras */
+.result-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(255, 255, 255, 0.1);
+  border-color: var(--border-hover, #444444);
+  background: var(--bg-tertiary, #1a1a1a);
+}
+
+.result-card:focus {
+  outline: 2px solid var(--primary-color, #3b82f6);
+  outline-offset: 2px;
+}
+
+/* Borde de relevancia - Indicador Visual */
+.result-card.relevance-high::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--success-color, #10b981);
+  opacity: 0.8;
+}
+
+.result-card.relevance-medium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--warning-color, #f59e0b);
+  opacity: 0.8;
+}
+
+.result-card.relevance-low::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--text-tertiary, #888888);
+  opacity: 0.8;
+}
+
+/* Header - Principio #10: Jerarquía Visual Clara */
+.result-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-md, 1rem);
+  margin-bottom: var(--spacing-md, 1rem);
+}
+
+.result-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm, 0.5rem);
+  flex: 1;
+  min-width: 0;
+}
+
+.result-title {
+  margin: 0;
+  font-size: var(--font-size-lg, 1.2rem);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--text-primary, #ffffff);
+  line-height: 1.4;
+  transition: color var(--transition-fast, 0.15s ease);
+}
+
+.result-card:hover .result-title {
+  color: var(--primary-color, #3b82f6);
+}
+
+.result-metadata {
+  display: flex;
+  gap: var(--spacing-sm, 0.5rem);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.metadata-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full, 9999px);
+  font-size: var(--font-size-xs, 0.75rem);
+  background: var(--bg-tertiary, #1a1a1a);
+  border: 1px solid var(--border-color, #333333);
+  color: var(--text-secondary, #cccccc);
+  transition: all var(--transition-fast, 0.15s ease);
+}
+
+.result-card:hover .metadata-tag {
+  border-color: var(--border-hover, #444444);
+  background: var(--bg-hover, #222222);
+}
+
+.tag-label {
+  color: var(--text-tertiary, #888888);
+  font-weight: var(--font-weight-medium, 500);
+}
+
+.tag-value {
+  color: var(--text-primary, #ffffff);
+  font-weight: var(--font-weight-semibold, 600);
+  font-family: 'Courier New', monospace;
+}
+
+/* Body - Principio #10: Información en Chunks Manejables */
+.result-card-body {
+  margin: var(--spacing-md, 1rem) 0;
+  color: var(--text-secondary, #cccccc);
+}
+
+.result-snippet {
+  margin: 0 0 var(--spacing-sm, 0.5rem) 0;
+  line-height: 1.6;
+  font-size: var(--font-size-sm, 0.9rem);
+  color: var(--text-secondary, #cccccc);
+}
+
+.expand-button {
+  background: none;
+  border: none;
+  color: var(--primary-color, #3b82f6);
+  padding: var(--spacing-xs, 4px) 0;
+  font-size: var(--font-size-sm, 0.9rem);
+  font-weight: var(--font-weight-medium, 500);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.expand-button:hover {
+  color: var(--primary-hover, #2563eb);
+  text-decoration: underline;
+  transform: translateX(2px);
+}
+
+.expand-button:focus {
+  outline: 2px solid var(--primary-color, #3b82f6);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm, 4px);
+}
+
+/* Footer - Indicador de Relevancia */
+.result-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-md, 1rem);
+  padding-top: var(--spacing-md, 1rem);
+  border-top: 1px solid var(--border-color, #333333);
+  gap: var(--spacing-md, 1rem);
+}
+
+.relevance-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 0.75rem);
+  flex: 1;
+}
+
+.relevance-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.relevance-bar-container {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-tertiary, #1a1a1a);
+  border-radius: var(--radius-full, 9999px);
+  overflow: hidden;
+  border: 1px solid var(--border-color, #333333);
+}
+
+.relevance-bar {
+  height: 100%;
+  transition: width var(--transition-normal, 0.3s ease);
+  border-radius: var(--radius-full, 9999px);
+  box-shadow: 0 0 8px currentColor;
+}
+
+.relevance-score {
+  font-size: var(--font-size-sm, 0.9rem);
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--text-primary, #ffffff);
+  min-width: 50px;
+  text-align: right;
+  font-family: 'Courier New', monospace;
+}
+
+.relevance-label {
+  font-size: var(--font-size-xs, 0.8rem);
+  color: var(--text-tertiary, #888888);
+  font-weight: var(--font-weight-medium, 500);
+  white-space: nowrap;
+}
+
+/* Quick Actions - Principio #6: Optimización del Flujo */
+.quick-actions {
+  display: flex;
+  gap: var(--spacing-xs, 6px);
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all var(--transition-fast, 0.2s ease);
+}
+
+.result-card:hover .quick-actions,
+.result-card:focus-within .quick-actions {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs, 4px);
+  padding: var(--spacing-xs, 6px) var(--spacing-sm, 10px);
+  background: var(--bg-tertiary, #1a1a1a);
+  border: 1px solid var(--border-color, #333333);
+  border-radius: var(--radius-md, 6px);
+  color: var(--text-secondary, #cccccc);
+  font-size: var(--font-size-xs, 0.75rem);
+  font-weight: var(--font-weight-medium, 500);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s ease);
+  white-space: nowrap;
+}
+
+.action-button:hover {
+  background: var(--primary-color, #3b82f6);
+  border-color: var(--primary-color, #3b82f6);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.action-button:active {
+  transform: translateY(0);
+}
+
+.action-button:focus-visible {
+  outline: 2px solid var(--primary-color, #3b82f6);
+  outline-offset: 2px;
+}
+
+.action-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.action-label {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Copy Notification - Feedback Visual */
+.copy-notification {
+  position: absolute;
+  top: var(--spacing-md, 1rem);
+  right: var(--spacing-md, 1rem);
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
+  background: var(--success-color, #10b981);
+  color: white;
+  border-radius: var(--radius-md, 6px);
+  font-size: var(--font-size-sm, 0.9rem);
+  font-weight: var(--font-weight-medium, 500);
+  box-shadow: var(--shadow-lg);
+  animation: slideInRight 0.3s ease, fadeOut 0.3s ease 1.7s forwards;
+  z-index: var(--z-tooltip, 1070);
+}
+
+/* Animaciones */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Responsive Design - Principio #5: Accesibilidad */
+@media (max-width: 768px) {
+  .result-card {
+    padding: var(--spacing-md, 1rem);
+    margin: var(--spacing-sm, 0.75rem) 0;
+  }
+
+  .result-card-header {
+    flex-direction: column;
+  }
+
+  .result-title {
+    font-size: var(--font-size-base, 1rem);
+  }
+
+  .result-card-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm, 0.5rem);
+  }
+
+  .relevance-indicator {
+    width: 100%;
+  }
+
+  .relevance-label {
+    align-self: flex-start;
+  }
+
+  /* Mostrar siempre las acciones en móvil */
+  .quick-actions {
+    opacity: 1;
+    transform: translateX(0);
+    width: 100%;
+    margin-top: var(--spacing-xs, 4px);
+  }
+
+  .action-button {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* Reducir movimiento - Principio #5: Accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  .result-card {
+    animation: none;
+    opacity: 1;
+  }
+
+  .result-card:hover {
+    transform: none;
+  }
+
+  .expand-button:hover {
+    transform: none;
+  }
+
+  .action-button:hover {
+    transform: none;
+  }
+
+  .quick-actions {
+    transition: opacity var(--transition-fast, 0.15s ease);
+  }
+
+  .copy-notification {
+    animation: none;
+  }
+}
