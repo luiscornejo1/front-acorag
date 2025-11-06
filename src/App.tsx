@@ -30,7 +30,7 @@ export default function App() {
     setSystemState({
       status: 'loading',
       message: 'Buscando documentos...',
-      details: `Búsqueda: "${q}"`,
+      details: q ? `Búsqueda: "${q}"` : `Búsqueda por Project ID: ${projectId}`,
       progress: 0,
     });
 
@@ -43,7 +43,13 @@ export default function App() {
         }));
       }, 200);
 
-      const data = await search({ query: q, project_id: projectId, top_k: 8, probes: 10 });
+      // Enviar búsqueda - el backend requiere 'query' siempre (puede ser string vacío)
+      const data = await search({ 
+        query: q || "", 
+        project_id: projectId, 
+        top_k: 8, 
+        probes: 10 
+      });
       
       clearInterval(progressInterval);
       setRows(data);

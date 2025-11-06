@@ -97,10 +97,14 @@ export default function SearchBar({ onSubmit }: Props) {
 
   // Manejar envío de búsqueda
   const handleSubmit = () => {
-    if (!q.trim()) return;
+    // Permitir búsqueda si hay query O project ID
+    if (!q.trim() && !project.trim()) return;
     
-    saveToHistory(q);
-    onSubmit(q, project || undefined);
+    if (q.trim()) {
+      saveToHistory(q);
+    }
+    
+    onSubmit(q.trim(), project.trim() || undefined);
     setShowSuggestions(false);
   };
 
@@ -227,7 +231,7 @@ export default function SearchBar({ onSubmit }: Props) {
 
       <button 
         onClick={handleSubmit}
-        disabled={!q.trim()}
+        disabled={!q.trim() && !project.trim()}
         className="search-button"
         aria-label="Buscar"
       >
