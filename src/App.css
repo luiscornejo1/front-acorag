@@ -1,110 +1,305 @@
+/**
+ * App.css - Estilos Principales
+ * 
+ * Principios aplicados:
+ * #4: Consistencia Visual - Diseño unificado
+ * #9: Mejoras en UX - Transiciones suaves
+ * #3: Feedback Visual - Estados claros
+ * #5: Accesibilidad - Skip links + focus management
+ */
+
+/* Skip Links - Principio #5: Accesibilidad */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--primary-color, #3b82f6);
+  color: white;
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
+  text-decoration: none;
+  border-radius: 0 0 var(--radius-md, 8px) 0;
+  font-weight: var(--font-weight-semibold, 600);
+  font-size: var(--font-size-sm, 0.9rem);
+  z-index: var(--z-tooltip, 1070);
+  transition: top var(--transition-fast, 0.2s ease);
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0.5rem;
   text-align: center;
-  background: #000000;
-  color: #ffffff;
+  background: var(--bg-primary, #000000);
+  color: var(--text-primary, #ffffff);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  min-height: 100vh;
 }
 
+/* Header - Principio #10: Jerarquía Visual Clara */
 .app-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 24px;
-  padding: 20px 0;
-  border-bottom: 1px solid #333333;
+  margin-bottom: var(--spacing-lg, 24px);
+  padding: var(--spacing-lg, 20px) 0;
+  border-bottom: 1px solid var(--border-color, #333333);
   text-align: center;
+  animation: fadeIn 0.5s ease;
 }
 
 .app-header h1 {
-  margin: 0 0 16px 0;
-  color: #ffffff;
-  font-size: 1.8rem;
-  font-weight: 300;
+  margin: 0 0 var(--spacing-md, 16px) 0;
+  color: var(--text-primary, #ffffff);
+  font-size: var(--font-size-2xl, 1.8rem);
+  font-weight: var(--font-weight-light, 300);
   letter-spacing: -0.5px;
   font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #ffffff 0%, #888888 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
+/* Mode Toggle - Principio #8: Affordances Claras */
 .mode-toggle {
   display: flex;
   gap: 2px;
-  background: #111111;
+  background: var(--bg-secondary, #111111);
   padding: 3px;
-  border-radius: 8px;
-  border: 1px solid #333333;
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--border-color, #333333);
   margin: 0 auto;
-  box-shadow: 0 2px 4px rgba(255,255,255,0.1);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-fast, 0.15s ease);
+}
+
+.mode-toggle:focus-within {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
 }
 
 .mode-toggle button {
-  padding: 8px 16px;
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-sm, 6px);
   background: transparent;
   cursor: pointer;
-  font-weight: 400;
-  font-size: 0.85rem;
-  transition: all 0.2s ease;
-  color: #cccccc;
+  font-weight: var(--font-weight-normal, 400);
+  font-size: var(--font-size-sm, 0.85rem);
+  transition: all var(--transition-fast, 0.2s ease);
+  color: var(--text-secondary, #cccccc);
   font-family: 'Inter', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto hover - Principio #9: Estados Interactivos */
+.mode-toggle button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+}
+
+.mode-toggle button:hover::before {
+  width: 200%;
+  height: 200%;
 }
 
 .mode-toggle button:hover {
-  background: #222222;
-  color: #ffffff;
+  background: var(--bg-hover, #222222);
+  color: var(--text-primary, #ffffff);
+  transform: translateY(-1px);
 }
 
 .mode-toggle button.active {
-  background: #ffffff;
-  color: #000000;
-  box-shadow: 0 1px 3px rgba(255,255,255,0.2);
+  background: var(--text-primary, #ffffff);
+  color: var(--bg-primary, #000000);
+  box-shadow: var(--shadow-md);
+  font-weight: var(--font-weight-medium, 500);
 }
 
 .mode-toggle button:hover:not(.active) {
-  background: #222222;
-  color: #ffffff;
+  background: var(--bg-hover, #222222);
+  color: var(--text-primary, #ffffff);
 }
 
+.mode-toggle button:focus-visible {
+  outline: 2px solid var(--primary-color, #3b82f6);
+  outline-offset: 2px;
+}
+
+/* Modos de visualización */
 .search-mode,
 .chat-mode {
   text-align: left;
-  background: #000000;
-  color: #ffffff;
+  background: var(--bg-primary, #000000);
+  color: var(--text-primary, #ffffff);
+  animation: fadeIn 0.3s ease;
+}
+
+/* Loading State - Principio #3: Feedback Visual */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl, 48px) var(--spacing-lg, 24px);
+  animation: fadeIn 0.3s ease;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--bg-tertiary, #1a1a1a);
+  border-top-color: var(--primary-color, #3b82f6);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: var(--spacing-md, 16px);
 }
 
 .loading {
   text-align: center;
-  color: #cccccc;
+  color: var(--text-secondary, #cccccc);
   font-style: italic;
-  padding: 16px;
-  font-weight: 300;
+  padding: var(--spacing-md, 16px);
+  font-weight: var(--font-weight-light, 300);
   font-family: 'Inter', sans-serif;
+  font-size: var(--font-size-base, 1rem);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+/* Error Container - Principio #3: Feedback + #8: Reversibilidad */
+.error-container {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md, 1rem);
+  padding: var(--spacing-lg, 1.5rem);
+  margin: var(--spacing-lg, 1.5rem) 0;
+  background: rgba(239, 68, 68, 0.1);
+  border: 2px solid var(--error-color, #ef4444);
+  border-radius: var(--radius-lg, 12px);
+  animation: slideInDown 0.3s ease;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+.error-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+  animation: shake 0.5s ease;
 }
-  .logo.react:hover {
-    filter: drop-shadow(0 0 2em #61dafbaa);
+
+.error-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm, 0.5rem);
+  align-items: flex-start;
+}
+
+.error-title {
+  margin: 0;
+  color: var(--error-color, #ef4444);
+  font-size: var(--font-size-lg, 1.2rem);
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+.error-message {
+  margin: 0;
+  color: var(--text-secondary, #cccccc);
+  font-size: var(--font-size-sm, 0.9rem);
+  line-height: 1.5;
+}
+
+.retry-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs, 6px);
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
+  background: var(--error-color, #ef4444);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md, 6px);
+  font-weight: var(--font-weight-medium, 500);
+  font-size: var(--font-size-sm, 0.9rem);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.2s ease);
+  margin-top: var(--spacing-sm, 8px);
+}
+
+.retry-button:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.retry-button:active {
+  transform: translateY(0);
+}
+
+.retry-button:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  50% { transform: translateX(10px); }
+  75% { transform: translateX(-10px); }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive design - Principio #5: Accesibilidad */
+@media (max-width: 768px) {
+  #root {
+    padding: var(--spacing-xs, 4px);
   }
 
-/* Responsive design para header */
-@media (max-width: 768px) {
   .app-header {
-    padding: 16px 0;
+    padding: var(--spacing-md, 16px) 0;
   }
   
   .app-header h1 {
-    font-size: 1.4rem;
-    margin-bottom: 12px;
+    font-size: var(--font-size-xl, 1.4rem);
+    margin-bottom: var(--spacing-sm, 12px);
   }
   
   .mode-toggle {
@@ -113,8 +308,48 @@
   
   .mode-toggle button {
     flex: 1;
+    padding: var(--spacing-sm, 8px) var(--spacing-xs, 4px);
+    font-size: var(--font-size-xs, 0.8rem);
   }
-}@keyframes logo-spin {
+
+  .loading-spinner {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Reducir movimiento - Principio #5: Accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .mode-toggle button:hover {
+    transform: none;
+  }
+}
+
+/* Logo animations - mantener compatibilidad */
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
   from {
     transform: rotate(0deg);
   }

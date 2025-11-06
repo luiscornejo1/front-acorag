@@ -1,69 +1,305 @@
+/**
+ * SearchBar Styles - Enhanced with Newell's Principles
+ * 
+ * Implementa:
+ * - GOMS: Autocompletado visible + feedback inmediato
+ * - Consistencia: Variables CSS del design system
+ * - Accesibilidad: Focus states + keyboard hints
+ * - UX: Transiciones suaves + estados hover
+ */
+
 .searchbar {
   display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
-  padding: 16px;
-  background: #111111;
-  border: 1px solid #333333;
-  border-radius: 8px;
+  flex-direction: column;
+  gap: var(--spacing-md, 12px);
+  margin-bottom: var(--spacing-lg, 20px);
+  padding: var(--spacing-lg, 16px);
+  background: var(--bg-secondary, #111111);
+  border: 1px solid var(--border-color, #333333);
+  border-radius: var(--radius-lg, 8px);
   font-family: 'Inter', sans-serif;
-  box-shadow: 0 2px 4px rgba(255,255,255,0.1);
+  box-shadow: var(--shadow-md);
+  transition: box-shadow var(--transition-normal, 0.3s ease);
 }
 
-.searchbar input {
+.searchbar:focus-within {
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2),
+              0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--primary-color, #3b82f6);
+}
+
+/* Container para input con autocomplete */
+.search-input-container {
+  position: relative;
   flex: 1;
-  padding: 10px 12px;
-  border: 1px solid #333333;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  color: #ffffff;
-  background: #000000;
-  transition: border-color 0.2s ease;
+}
+
+.search-input,
+.project-input {
+  width: 100%;
+  padding: var(--spacing-sm, 10px) var(--spacing-md, 12px);
+  padding-right: 40px; /* Espacio para botón clear */
+  border: 1px solid var(--border-color, #333333);
+  border-radius: var(--radius-md, 6px);
+  font-size: var(--font-size-sm, 0.9rem);
+  color: var(--text-primary, #ffffff);
+  background: var(--bg-primary, #000000);
+  transition: all var(--transition-fast, 0.2s ease);
   font-family: 'Inter', sans-serif;
 }
 
-.searchbar input:focus {
+.search-input:focus,
+.project-input:focus {
   outline: none;
-  border-color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+  border-color: var(--primary-color, #3b82f6);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  background: var(--bg-tertiary, #1a1a1a);
 }
 
-.searchbar input::placeholder {
-  color: #666666;
+.search-input::placeholder,
+.project-input::placeholder {
+  color: var(--text-tertiary, #666666);
 }
 
-.searchbar button {
-  padding: 10px 20px;
-  background: #ffffff;
-  color: #000000;
-  border: 1px solid #ffffff;
-  border-radius: 6px;
+/* Botón de limpiar (X) */
+.clear-button {
+  position: absolute;
+  right: var(--spacing-sm, 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: var(--bg-hover, #222222);
+  color: var(--text-secondary, #cccccc);
+  border-radius: var(--radius-sm, 4px);
   cursor: pointer;
-  font-weight: 400;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
+  font-size: 14px;
+  line-height: 1;
+  transition: all var(--transition-fast, 0.15s ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clear-button:hover {
+  background: var(--error-color, #ef4444);
+  color: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.clear-button:focus-visible {
+  outline: 2px solid var(--primary-color, #3b82f6);
+  outline-offset: 2px;
+}
+
+/* Dropdown de sugerencias - GOMS: Autocompletado */
+.suggestions-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--bg-secondary, #111111);
+  border: 1px solid var(--border-color, #333333);
+  border-radius: var(--radius-md, 8px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4),
+              0 0 0 1px rgba(59, 130, 246, 0.2);
+  z-index: var(--z-dropdown, 1000);
+  max-height: 300px;
+  overflow-y: auto;
+  animation: slideInDown 0.2s ease;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+  padding: var(--spacing-sm, 10px) var(--spacing-md, 12px);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s ease);
+  border-left: 3px solid transparent;
+}
+
+.suggestion-item:hover,
+.suggestion-item.selected {
+  background: var(--bg-hover, #222222);
+  border-left-color: var(--primary-color, #3b82f6);
+}
+
+.suggestion-item.selected {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.suggestion-icon {
+  font-size: 14px;
+  opacity: 0.6;
+}
+
+.suggestion-text {
+  flex: 1;
+  color: var(--text-primary, #ffffff);
+  font-size: var(--font-size-sm, 0.9rem);
+}
+
+.suggestion-badge {
+  padding: 2px 8px;
+  background: var(--primary-color, #3b82f6);
+  color: white;
+  border-radius: var(--radius-full, 12px);
+  font-size: var(--font-size-xs, 0.75rem);
+  font-weight: var(--font-weight-medium, 500);
+}
+
+/* Botón de búsqueda principal */
+.search-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm, 8px);
+  padding: var(--spacing-sm, 10px) var(--spacing-lg, 20px);
+  background: var(--primary-color, #3b82f6);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md, 6px);
+  cursor: pointer;
+  font-weight: var(--font-weight-medium, 500);
+  font-size: var(--font-size-sm, 0.9rem);
+  transition: all var(--transition-fast, 0.2s ease);
   white-space: nowrap;
   font-family: 'Inter', sans-serif;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
 }
 
-.searchbar button:hover {
-  background: #cccccc;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(255,255,255,0.2);
+.search-button:hover:not(:disabled) {
+  background: var(--primary-hover, #2563eb);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
 }
 
-.searchbar button:active {
+.search-button:active:not(:disabled) {
   transform: translateY(0);
+}
+
+.search-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.search-button:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+.button-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.button-text {
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+/* Keyboard hints - Accesibilidad */
+.keyboard-hints {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+  padding: var(--spacing-xs, 6px) var(--spacing-sm, 8px);
+  background: var(--bg-tertiary, #1a1a1a);
+  border-radius: var(--radius-sm, 4px);
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--text-tertiary, #888888);
+  border: 1px solid var(--border-color, #333333);
+}
+
+.keyboard-hints kbd {
+  padding: 2px 6px;
+  background: var(--bg-primary, #000000);
+  border: 1px solid var(--border-color, #333333);
+  border-radius: var(--radius-sm, 4px);
+  font-family: 'Courier New', monospace;
+  font-size: var(--font-size-xs, 0.7rem);
+  color: var(--text-secondary, #cccccc);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Layout responsivo */
+@media (min-width: 769px) {
+  .searchbar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .search-input-container {
+    flex: 2;
+    min-width: 300px;
+  }
+
+  .project-input {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .search-button {
+    flex-shrink: 0;
+  }
+
+  .keyboard-hints {
+    flex-basis: 100%;
+    justify-content: center;
+  }
 }
 
 @media (max-width: 768px) {
   .searchbar {
-    flex-direction: column;
-    gap: 10px;
+    padding: var(--spacing-md, 12px);
   }
-  
-  .searchbar input,
-  .searchbar button {
+
+  .search-input,
+  .project-input,
+  .search-button {
     width: 100%;
+  }
+
+  .button-text {
+    display: inline;
+  }
+
+  .keyboard-hints {
+    font-size: 0.7rem;
+    padding: var(--spacing-xs, 4px);
+    gap: var(--spacing-xs, 4px);
+  }
+
+  .keyboard-hints kbd {
+    padding: 1px 4px;
+    font-size: 0.65rem;
+  }
+}
+
+/* Animaciones */
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reducir animaciones */
+@media (prefers-reduced-motion: reduce) {
+  .suggestions-dropdown {
+    animation: none;
+  }
+
+  .search-button:hover,
+  .clear-button:hover {
+    transform: none;
   }
 }
