@@ -144,11 +144,12 @@ const ChatAssistant: React.FC<ChatAssistantProps> = ({ apiUrl }) => {
                   
                   {showSources[message.id] && (
                     <div className="sources-list">
-                      {message.sources.slice(0, 3).map((source, index) => (
+                      {message.sources.map((source, index) => (
                         <div key={index} className="source-item">
                           <div className="source-title">{source.title}</div>
-                          <div className="source-score">Relevancia: {(source.score || 0).toFixed(3)}</div>
-                          <div className="source-snippet">{source.snippet?.substring(0, 200)}...</div>
+                          <div className="source-number">Doc: {source.number || 'N/A'}</div>
+                          <div className="source-score">Relevancia: {((1 - (source.score || 0)) * 100).toFixed(1)}%</div>
+                          <div className="source-snippet">{source.snippet?.substring(0, 300)}...</div>
                         </div>
                       ))}
                     </div>
