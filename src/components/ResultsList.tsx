@@ -11,6 +11,7 @@
 import { useState, useMemo } from "react";
 import type { SearchRow } from "../api";
 import { ResultCard } from "./ResultCard";
+import { DocumentSummary } from "./DocumentSummary";
 import "./ResultsList.css";
 
 type SortBy = 'relevance' | 'date' | 'type' | 'title';
@@ -158,6 +159,14 @@ export default function ResultsList({ rows }: ResultsListProps) {
           </div>
         </div>
       </div>
+
+      {/* Resumen del documento más relevante (solo primera página) */}
+      {currentPage === 1 && sortedRows.length > 0 && (
+        <DocumentSummary 
+          document={sortedRows[0]}
+          totalResults={sortedRows.length}
+        />
+      )}
 
       {/* Lista de resultados paginada */}
       <div className="results-list" role="list" aria-live="polite">
