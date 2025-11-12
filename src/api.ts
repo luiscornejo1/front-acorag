@@ -23,6 +23,11 @@ export async function search(params: {
   return API.post("search", { json: params }).json<SearchRow[]>();
 }
 
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
 export interface ChatResponse {
   question: string;
   answer: string;
@@ -31,7 +36,9 @@ export interface ChatResponse {
 }
 
 export async function chat(params: {
-  question: string; max_context_docs?: number;
+  question: string; 
+  max_context_docs?: number;
+  history?: ChatMessage[];
 }): Promise<ChatResponse> {
   return API.post("chat", { json: params }).json<ChatResponse>();
 }

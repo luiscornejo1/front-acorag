@@ -49,6 +49,15 @@ const ChatAssistant: React.FC<ChatAssistantProps> = ({ apiUrl }) => {
     setIsLoading(true);
 
     try {
+      // Construir historial para enviar al backend (últimos 10 mensajes, excluyendo el mensaje de bienvenida)
+      const conversationHistory = messages
+        .slice(1)  // Excluir mensaje de bienvenida
+        .slice(-10)  // Últimos 10 mensajes
+        .map(msg => ({
+          role: msg.type === 'user' ? 'user' : 'assistant',
+          content: msg.content
+        }));
+
       const response = await fetch(`${apiUrl}/chat`, {
         method: 'POST',
         headers: {
@@ -56,7 +65,8 @@ const ChatAssistant: React.FC<ChatAssistantProps> = ({ apiUrl }) => {
         },
         body: JSON.stringify({
           question: inputText,
-          max_context_docs: maxDocs
+          max_context_docs: maxDocs,
+          history: conversationHistory
         }),
       });
 
