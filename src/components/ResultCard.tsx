@@ -19,60 +19,74 @@ interface ResultCardProps {
 }
 
 export const ResultCard: React.FC<ResultCardProps> = ({ result, index }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [showActions, setShowActions] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [loadingPdf, setLoadingPdf] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
   // Calcular nivel de relevancia basado en score
   const getRelevanceLevel = (score: number) => {
-    if (score > 0.8) return {
+    if (score > 0.7) return {
       level: 'high',
-      label: 'Alta Relevancia',
+      label: 'Muy Relevante',
       icon: '🎯',
-      color: 'var(--success-color, #10b981)'
+      class: 'badge-high',
+      percentage: Math.round(score * 100)
     };
     if (score > 0.5) return {
       level: 'medium',
-      label: 'Relevancia Media',
+      label: 'Relevante',
       icon: '📍',
-      color: 'var(--warning-color, #f59e0b)'
+      class: 'badge-medium',
+      percentage: Math.round(score * 100)
     };
     return {
       level: 'low',
-      label: 'Baja Relevancia',
+      label: 'Posible Match',
       icon: '📌',
-      color: 'var(--text-tertiary, #888888)'
+      class: 'badge-low',
+      percentage: Math.round(score * 100)
     };
   };
 
   const relevance = getRelevanceLevel(result.score);
-  const snippetPreview = result.snippet 
-    ? (isExpanded ? result.snippet : result.snippet.substring(0, 200) + (result.snippet.length > 200 ? '...' : ''))
-    : '';
-
-  // Acciones rápidas - Principio #6: Optimización del Flujo
-  const handleCopyDocId = async () => {
+  
+  // Formatear fecha
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return 'Fecha no disponible';
     try {
-      await navigator.clipboard.writeText(result.document_id);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Error copying to clipboard:', err);
+      return new Date(dateStr).toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    } catch {
+      return 'Fecha no disponible';
     }
   };
 
-  const handleCopyContent = async () => {
-    const content = `${result.title}\n\nDoc ID: ${result.document_id}\n\n${result.snippet || ''}`;
-    try {
-      await navigator.clipboard.writeText(content);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Error copying to clipboard:', err);
-    }
+  // Obtener icono por tipo
+  const getDocIcon = (type: string) => {
+    const icons: { [key: string]: string } = {
+      'Informe': '📊',
+      'Plano': '📐',
+      'Especificación': '📋',
+      'Procedimiento': '📝',
+      'Manual': '📖',
+      'Cronograma': '📅',
+      'Presupuesto': '💰',
+      'Contrato': '📜',
+      'default': '📄'
+    };
+    return icons[type] || icons.default;
+  };
+
+  // Extracto de contenido
+  const getExcerpt = (snippet: string | null) => {
+    if (!snippet) return 'No hay contenido disponible para vista previa.';
+    return snippet.length > 250 
+      ? snippet.substring(0, 250) + '...'
+      : snippet;
   };
 
   const handleOpenPdf = async () => {
@@ -80,11 +94,9 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, index }) => {
       alert('⚠️ Este documento no tiene un archivo asociado');
       return;
     }
-
     setLoadingPdf(true);
     try {
       const url = `${API_URL}/document/${result.document_id}/file`;
-      // Abrir en nueva pestaña
       window.open(url, '_blank');
     } catch (err) {
       console.error('Error opening PDF:', err);
@@ -94,156 +106,220 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, index }) => {
     }
   };
 
-  const formatDate = (dateStr: string | null) => {
-    if (!dateStr) return null;
-    try {
-      return new Date(dateStr).toLocaleDateString('es-ES', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      });
-    } catch {
-      return null;
-    }
-  };
-
   return (
-    <article 
-      className={`result-card relevance-${relevance.level}`}
-      style={{ animationDelay: `${index * 50}ms` }}
-      tabIndex={0}
-      role="article"
-      aria-label={`Resultado ${index + 1}: ${result.title}`}
-      onMouseEnter={() => setShowActions(true)}
-      onMouseLeave={() => setShowActions(false)}
-      onFocus={() => setShowActions(true)}
-      onBlur={(e) => {
-        // Solo ocultar si el focus sale completamente del card
-        if (!e.currentTarget.contains(e.relatedTarget)) {
-          setShowActions(false);
-        }
-      }}
-    >
-      {/* Header con título y metadata */}
-      <div className="result-card-header">
-        <div className="result-title-section">
-          <h3 className="result-title">{result.title}</h3>
-          <div className="result-metadata">
-            <span className="metadata-tag" title="ID del documento">
-              <span className="tag-label">Doc:</span>
-              <span className="tag-value">{result.document_id}</span>
-            </span>
+    <div className="summary-card" style={{ marginBottom: '1.5rem', animationDelay: `${index * 50}ms` }}>
+      {/* Badge de relevancia */}
+      <div className={`relevance-badge ${relevance.class}`}>
+        <span className="badge-icon">{relevance.icon}</span>
+        <span className="badge-text">{relevance.label}</span>
+        <span className="badge-percentage">{relevance.percentage}%</span>
+      </div>
+
+      {/* Información principal */}
+      <div className="summary-main">
+        <div className="doc-icon-large">
+          {getDocIcon(result.doc_type)}
+        </div>
+        
+        <div className="doc-info">
+          <h2 className="doc-title" style={{ color: '#1f2937', fontSize: '1.25rem' }}>
+            {result.title || 'Sin título'}
+          </h2>
+          
+          <div className="doc-meta-grid">
+            <div className="meta-item">
+              <span className="meta-label" style={{ color: '#6b7280' }}>📋 Número:</span>
+              <span className="meta-value" style={{ color: '#1f2937' }}>
+                {result.number || 'N/A'}
+              </span>
+            </div>
+            
+            <div className="meta-item">
+              <span className="meta-label" style={{ color: '#6b7280' }}>🏢 Proyecto:</span>
+              <span className="meta-value" style={{ color: '#1f2937' }}>
+                {result.project_id || 'N/A'}
+              </span>
+            </div>
+            
+            <div className="meta-item">
+              <span className="meta-label" style={{ color: '#6b7280' }}>📂 Categoría:</span>
+              <span className="meta-value" style={{ color: '#1f2937' }}>
+                {result.category || 'Sin categoría'}
+              </span>
+            </div>
+            
+            <div className="meta-item">
+              <span className="meta-label" style={{ color: '#6b7280' }}>📅 Fecha:</span>
+              <span className="meta-value" style={{ color: '#1f2937' }}>
+                {formatDate(result.date_modified)}
+              </span>
+            </div>
+          </div>
+
+          {/* Badges de estado */}
+          <div className="doc-badges">
             {result.doc_type && (
-              <span className="metadata-tag" title="Tipo de documento">
-                <span className="tag-label">Tipo:</span>
-                <span className="tag-value">{result.doc_type}</span>
+              <span className="badge badge-type">
+                {getDocIcon(result.doc_type)} {result.doc_type}
               </span>
             )}
-            {result.category && (
-              <span className="metadata-tag" title="Categoría">
-                <span className="tag-label">Cat:</span>
-                <span className="tag-value">{result.category}</span>
+            {result.revision && (
+              <span className="badge badge-revision">
+                🔄 {result.revision}
               </span>
             )}
-            {result.date_modified && (
-              <span className="metadata-tag" title="Fecha de modificación">
-                <span className="tag-label">📅</span>
-                <span className="tag-value">{formatDate(result.date_modified)}</span>
+            {result.file_type && (
+              <span className="badge badge-file">
+                📎 {result.file_type.toUpperCase()}
               </span>
             )}
           </div>
         </div>
+      </div>
 
-        {/* Acciones rápidas - Principio #6 */}
-        {showActions && (
-          <div className="quick-actions" role="group" aria-label="Acciones rápidas">
-            {result.filename && result.file_type && (
-              <button
-                onClick={handleOpenPdf}
-                className="action-button action-primary"
-                title={`Abrir ${result.file_type.toUpperCase()}`}
-                aria-label={`Abrir archivo ${result.file_type.toUpperCase()}`}
-                disabled={loadingPdf}
-              >
-                <span className="action-icon">{loadingPdf ? '⏳' : '📄'}</span>
-                <span className="action-label">Ver {result.file_type.toUpperCase()}</span>
-              </button>
-            )}
-            <button
-              onClick={handleCopyDocId}
-              className="action-button"
-              title="Copiar ID del documento"
-              aria-label="Copiar ID del documento"
-            >
-              <span className="action-icon">{copied ? '✓' : '📋'}</span>
-              <span className="action-label">Copiar ID</span>
-            </button>
-            <button
-              onClick={handleCopyContent}
-              className="action-button"
-              title="Copiar contenido completo"
-              aria-label="Copiar contenido completo"
-            >
-              <span className="action-icon">📄</span>
-              <span className="action-label">Copiar todo</span>
-            </button>
-          </div>
+      {/* Vista previa del contenido */}
+      <div className="summary-content">
+        <h3 className="content-label" style={{ color: '#4b5563' }}>
+          <span className="label-icon">👁️</span>
+          Vista Previa del Contenido
+        </h3>
+        <p className="content-excerpt" style={{ color: '#1f2937' }}>
+          {getExcerpt(result.snippet)}
+        </p>
+      </div>
+
+      {/* Botones de acción */}
+      <div className="summary-actions">
+        {result.filename && result.file_type && (
+          <button 
+            onClick={handleOpenPdf}
+            className="action-btn action-primary"
+            style={{ 
+              background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+              color: 'white',
+              border: 'none',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              fontWeight: '600'
+            }}
+            disabled={loadingPdf}
+          >
+            <span className="btn-icon">{loadingPdf ? '⏳' : '📄'}</span>
+            Ver Documento Completo
+          </button>
         )}
+        
+        <button 
+          onClick={() => setShowDetails(!showDetails)}
+          className="action-btn action-secondary"
+          style={{
+            background: 'white',
+            color: '#1f2937',
+            border: '2px solid #e5e7eb',
+            padding: '0.75rem 1.5rem',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            fontWeight: '600'
+          }}
+        >
+          <span className="btn-icon">{showDetails ? '▲' : '▼'}</span>
+          {showDetails ? 'Ocultar' : 'Ver'} Detalles Técnicos
+        </button>
       </div>
 
-      {/* Body con contenido */}
-      {snippetPreview && (
-        <div className="result-card-body">
-          <p className="result-snippet">{snippetPreview}</p>
-          {result.snippet && result.snippet.length > 200 && (
-            <button 
-              className="expand-button"
-              onClick={() => setIsExpanded(!isExpanded)}
-              aria-expanded={isExpanded}
-              aria-label={isExpanded ? 'Ver menos contenido' : 'Ver más contenido'}
-            >
-              {isExpanded ? '▲ Ver menos' : '▼ Ver más'}
-            </button>
-          )}
-        </div>
-      )}
-
-      {/* Footer con indicador de relevancia */}
-      <div className="result-card-footer">
-        <div className="relevance-indicator" title={`${(result.score * 100).toFixed(1)}% de relevancia`}>
-          <span className="relevance-icon" role="img" aria-label={relevance.label}>
-            {relevance.icon}
-          </span>
+      {/* Detalles técnicos expandibles */}
+      {showDetails && (
+        <div className="summary-technical-details">
+          <h4 className="details-title" style={{ color: '#1f2937' }}>
+            <span className="details-icon">⚙️</span>
+            Información Técnica Detallada
+          </h4>
           
-          <div className="relevance-bar-container">
-            <div 
-              className="relevance-bar"
-              style={{ 
-                width: `${result.score * 100}%`,
-                backgroundColor: relevance.color
-              }}
-              role="progressbar"
-              aria-valuenow={Math.round(result.score * 100)}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-label={`Nivel de relevancia: ${Math.round(result.score * 100)}%`}
-            />
+          <div className="details-grid">
+            <div className="detail-row">
+              <span className="detail-label" style={{ color: '#374151', fontWeight: '600' }}>
+                ID del Documento:
+              </span>
+              <code className="detail-value" style={{ color: '#1f2937' }}>
+                {result.document_id}
+              </code>
+            </div>
+            
+            {result.number && (
+              <div className="detail-row">
+                <span className="detail-label" style={{ color: '#374151', fontWeight: '600' }}>
+                  Número de Identificación:
+                </span>
+                <code className="detail-value" style={{ color: '#1f2937' }}>
+                  {result.number}
+                </code>
+              </div>
+            )}
+            
+            {result.filename && (
+              <div className="detail-row">
+                <span className="detail-label" style={{ color: '#374151', fontWeight: '600' }}>
+                  Nombre del Archivo:
+                </span>
+                <code className="detail-value" style={{ color: '#1f2937' }}>
+                  {result.filename}
+                </code>
+              </div>
+            )}
+            
+            <div className="detail-row">
+              <span className="detail-label" style={{ color: '#374151', fontWeight: '600' }}>
+                Tipo de Documento:
+              </span>
+              <span className="detail-value" style={{ color: '#1f2937', fontWeight: '500' }}>
+                {result.doc_type || 'No especificado'}
+              </span>
+            </div>
+            
+            {result.revision && (
+              <div className="detail-row">
+                <span className="detail-label" style={{ color: '#374151', fontWeight: '600' }}>
+                  Revisión:
+                </span>
+                <span className="detail-value" style={{ color: '#1f2937', fontWeight: '500' }}>
+                  {result.revision}
+                </span>
+              </div>
+            )}
+            
+            <div className="detail-row">
+              <span className="detail-label" style={{ color: '#374151', fontWeight: '600' }}>
+                Proyecto Asociado:
+              </span>
+              <span className="detail-value" style={{ color: '#1f2937', fontWeight: '500' }}>
+                {result.project_id || 'N/A'}
+              </span>
+            </div>
+            
+            <div className="detail-row">
+              <span className="detail-label" style={{ color: '#374151', fontWeight: '600' }}>
+                Score de Búsqueda:
+              </span>
+              <span className="detail-value" style={{ color: '#1f2937', fontWeight: '500' }}>
+                <div className="score-bar">
+                  <div 
+                    className="score-fill" 
+                    style={{ width: `${result.score * 100}%` }}
+                  />
+                </div>
+                {(result.score * 100).toFixed(1)}%
+              </span>
+            </div>
           </div>
-          
-          <span className="relevance-score">
-            {(result.score * 100).toFixed(1)}%
-          </span>
-        </div>
-
-        <span className="relevance-label">{relevance.label}</span>
-      </div>
-
-      {/* Notificación de copiado */}
-      {copied && (
-        <div className="copy-notification" role="status" aria-live="polite">
-          ✓ Copiado al portapapeles
         </div>
       )}
-    </article>
+    </div>
   );
 };

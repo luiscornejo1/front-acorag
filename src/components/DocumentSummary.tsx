@@ -235,51 +235,77 @@ export const DocumentSummary: React.FC<DocumentSummaryProps> = ({
         {/* Detalles técnicos (expandible) */}
         {showDetails && (
           <div className="summary-technical-details">
-            <h4 className="details-title">
+            <h4 className="details-title" style={{ color: '#1f2937' }}>
               <span className="details-icon">⚙️</span>
               Información Técnica Detallada
             </h4>
             
             <div className="details-grid">
               <div className="detail-row">
-                <span className="detail-label">ID del Documento:</span>
-                <code className="detail-value">{document.document_id}</code>
+                <span className="detail-label" style={{ color: '#374151', fontWeight: '600' }}>
+                  ID del Documento:
+                </span>
+                <code className="detail-value" style={{ color: '#1f2937' }}>
+                  {document.document_id}
+                </code>
               </div>
               
               {document.number && (
                 <div className="detail-row">
-                  <span className="detail-label">Número de Identificación:</span>
-                  <code className="detail-value">{document.number}</code>
+                  <span className="detail-label" style={{ color: '#374151', fontWeight: '600' }}>
+                    Número de Identificación:
+                  </span>
+                  <code className="detail-value" style={{ color: '#1f2937' }}>
+                    {document.number}
+                  </code>
                 </div>
               )}
               
               {document.filename && (
                 <div className="detail-row">
-                  <span className="detail-label">Nombre del Archivo:</span>
-                  <code className="detail-value">{document.filename}</code>
+                  <span className="detail-label" style={{ color: '#374151', fontWeight: '600' }}>
+                    Nombre del Archivo:
+                  </span>
+                  <code className="detail-value" style={{ color: '#1f2937' }}>
+                    {document.filename}
+                  </code>
                 </div>
               )}
               
               <div className="detail-row">
-                <span className="detail-label">Tipo de Documento:</span>
-                <span className="detail-value">{document.doc_type || 'No especificado'}</span>
+                <span className="detail-label" style={{ color: '#374151', fontWeight: '600' }}>
+                  Tipo de Documento:
+                </span>
+                <span className="detail-value" style={{ color: '#1f2937', fontWeight: '500' }}>
+                  {document.doc_type || 'No especificado'}
+                </span>
               </div>
               
               {document.revision && (
                 <div className="detail-row">
-                  <span className="detail-label">Revisión:</span>
-                  <span className="detail-value">{document.revision}</span>
+                  <span className="detail-label" style={{ color: '#374151', fontWeight: '600' }}>
+                    Revisión:
+                  </span>
+                  <span className="detail-value" style={{ color: '#1f2937', fontWeight: '500' }}>
+                    {document.revision}
+                  </span>
                 </div>
               )}
               
               <div className="detail-row">
-                <span className="detail-label">Proyecto Asociado:</span>
-                <span className="detail-value">{document.project_id || 'N/A'}</span>
+                <span className="detail-label" style={{ color: '#374151', fontWeight: '600' }}>
+                  Proyecto Asociado:
+                </span>
+                <span className="detail-value" style={{ color: '#1f2937', fontWeight: '500' }}>
+                  {document.project_id || 'N/A'}
+                </span>
               </div>
               
               <div className="detail-row">
-                <span className="detail-label">Score de Búsqueda:</span>
-                <span className="detail-value">
+                <span className="detail-label" style={{ color: '#374151', fontWeight: '600' }}>
+                  Score de Búsqueda:
+                </span>
+                <span className="detail-value" style={{ color: '#1f2937', fontWeight: '500' }}>
                   <div className="score-bar">
                     <div 
                       className="score-fill" 
@@ -296,7 +322,7 @@ export const DocumentSummary: React.FC<DocumentSummaryProps> = ({
 
       {/* Footer informativo */}
       <div className="summary-footer">
-        <p className="footer-text">
+        <p className="footer-text" style={{ color: '#78350f' }}>
           💡 <strong>Tip:</strong> Este es el documento con mayor relevancia. 
           Desplázate hacia abajo para ver más resultados.
         </p>

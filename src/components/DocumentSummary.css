@@ -314,7 +314,7 @@
   margin: 0 0 1rem 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--text-primary, #1f2937);
+  color: #1f2937 !important;
 }
 
 .details-icon {
@@ -340,13 +340,14 @@
 .detail-label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--text-secondary, #6b7280);
+  color: #374151 !important;
 }
 
 .detail-value {
   font-size: 0.9rem;
-  color: var(--text-primary, #1f2937);
+  color: #1f2937 !important;
   word-break: break-word;
+  font-weight: 500 !important;
 }
 
 .detail-value code {
@@ -355,7 +356,7 @@
   border-radius: 4px;
   font-family: 'Courier New', monospace;
   font-size: 0.85rem;
-  color: #3730a3;
+  color: #3730a3 !important;
 }
 
 /* Score bar */
