@@ -220,15 +220,6 @@ export default function SearchBar({ onSubmit }: Props) {
         )}
       </div>
 
-      <input 
-        value={project}
-        onChange={e => setProject(e.target.value)}
-        onKeyDown={e => e.key === 'Enter' && handleSubmit()}
-        placeholder="Project ID (opcional)"
-        className="project-input"
-        aria-label="ID del proyecto (opcional)"
-      />
-
       <button 
         onClick={handleSubmit}
         disabled={!q.trim() && !project.trim()}
