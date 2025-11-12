@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import SearchBar from "./components/SearchBar";
 import ResultsList from "./components/ResultsList";
 import ChatAssistant from "./components/ChatAssistant";
+import DocumentUploader from "./components/DocumentUploader";
 import { SystemStatus, type SystemState } from "./components/SystemStatus";
 import { search, type SearchRow } from "./api";
 import "./App.css";
@@ -9,7 +10,7 @@ import "./App.css";
 export default function App() {
   const [rows, setRows] = useState<SearchRow[]>([]);
   const [loading, setLoading] = useState(false);
-  const [mode, setMode] = useState<'search' | 'chat'>('search');
+  const [mode, setMode] = useState<'search' | 'chat' | 'upload'>('search');
   const [error, setError] = useState<string | null>(null);
   
   // Refs para navegación con teclado
@@ -138,6 +139,16 @@ export default function App() {
             >
               <span aria-hidden="true">💬</span> Chat Assistant
             </button>
+            <button 
+              className={mode === 'upload' ? 'active' : ''} 
+              onClick={() => setMode('upload')}
+              aria-pressed={mode === 'upload'}
+              aria-label="Modo de subir documentos"
+              role="tab"
+              aria-selected={mode === 'upload'}
+            >
+              <span aria-hidden="true">📤</span> Subir Documento
+            </button>
           </div>
         </div>
 
@@ -172,9 +183,24 @@ export default function App() {
               </div>
             )}
           </div>
-        ) : (
+        ) : mode === 'chat' ? (
           <div className="chat-mode">
             <ChatAssistant apiUrl={apiUrl} />
+          </div>
+        ) : (
+          <div className="upload-mode">
+            <DocumentUploader 
+              onUploadSuccess={() => {
+                setSystemState({
+                  status: 'success',
+                  message: 'Documento ingestado exitosamente',
+                  details: 'Ahora puedes buscarlo en la pestaña de Búsqueda',
+                });
+                setTimeout(() => {
+                  setSystemState({ status: 'idle', message: 'Sistema listo' });
+                }, 4000);
+              }}
+            />
           </div>
         )}
       </main>
