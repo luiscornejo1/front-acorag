@@ -48,7 +48,7 @@ export default function App() {
       const data = await search({ 
         query: q || "", 
         project_id: projectId, 
-        top_k: 8, 
+        top_k: 50,  // Traer hasta 50 resultados (máximo permitido)
         probes: 10 
       });
       
