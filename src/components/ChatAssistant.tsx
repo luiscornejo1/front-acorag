@@ -146,9 +146,24 @@ const ChatAssistant: React.FC<ChatAssistantProps> = ({ apiUrl }) => {
                     <div className="sources-list">
                       {message.sources.map((source, index) => (
                         <div key={index} className="source-item">
-                          <div className="source-title">{source.title}</div>
-                          <div className="source-number">Doc: {source.number || 'N/A'}</div>
-                          <div className="source-score">Relevancia: {((1 - (source.score || 0)) * 100).toFixed(1)}%</div>
+                          <div className="source-header">
+                            <div className="source-info">
+                              <div className="source-title">{source.title}</div>
+                              <div className="source-meta">
+                                <span className="source-number">Doc: {source.number || 'N/A'}</span>
+                                <span className="source-score">Relevancia: {(source.score * 100).toFixed(1)}%</span>
+                              </div>
+                            </div>
+                            {source.filename && source.file_type && (
+                              <button
+                                className="source-pdf-button"
+                                onClick={() => window.open(`${apiUrl}/document/${source.document_id}/file`, '_blank')}
+                                title={`Abrir ${source.file_type.toUpperCase()}`}
+                              >
+                                📄 Ver {source.file_type.toUpperCase()}
+                              </button>
+                            )}
+                          </div>
                           <div className="source-snippet">{source.snippet?.substring(0, 300)}...</div>
                         </div>
                       ))}

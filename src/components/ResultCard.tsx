@@ -22,6 +22,9 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, index }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [loadingPdf, setLoadingPdf] = useState(false);
+
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
   // Calcular nivel de relevancia basado en score
   const getRelevanceLevel = (score: number) => {
@@ -69,6 +72,25 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, index }) => {
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Error copying to clipboard:', err);
+    }
+  };
+
+  const handleOpenPdf = async () => {
+    if (!result.filename || !result.file_type) {
+      alert('⚠️ Este documento no tiene un archivo asociado');
+      return;
+    }
+
+    setLoadingPdf(true);
+    try {
+      const url = `${API_URL}/document/${result.document_id}/file`;
+      // Abrir en nueva pestaña
+      window.open(url, '_blank');
+    } catch (err) {
+      console.error('Error opening PDF:', err);
+      alert('❌ Error al abrir el archivo');
+    } finally {
+      setLoadingPdf(false);
     }
   };
 
@@ -135,6 +157,18 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, index }) => {
         {/* Acciones rápidas - Principio #6 */}
         {showActions && (
           <div className="quick-actions" role="group" aria-label="Acciones rápidas">
+            {result.filename && result.file_type && (
+              <button
+                onClick={handleOpenPdf}
+                className="action-button action-primary"
+                title={`Abrir ${result.file_type.toUpperCase()}`}
+                aria-label={`Abrir archivo ${result.file_type.toUpperCase()}`}
+                disabled={loadingPdf}
+              >
+                <span className="action-icon">{loadingPdf ? '⏳' : '📄'}</span>
+                <span className="action-label">Ver {result.file_type.toUpperCase()}</span>
+              </button>
+            )}
             <button
               onClick={handleCopyDocId}
               className="action-button"

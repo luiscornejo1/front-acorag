@@ -10,9 +10,11 @@ export interface SearchRow {
   doc_type: string;
   revision: string;
   filename: string;
+  file_type: string;
   date_modified: string | null;
   snippet: string | null;
   score: number;
+  project_id: string;
 }
 
 export async function search(params: {
