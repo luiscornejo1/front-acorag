@@ -96,7 +96,7 @@ export const DocumentSummary: React.FC<DocumentSummaryProps> = ({
       <div className="summary-header">
         <div className="summary-stats">
           <span className="stat-item">
-            <strong>{totalResults}</strong> resultado{totalResults !== 1 ? 's' : ''} encontrado{totalResults !== 1 ? 's' : ''}
+            <strong style={{ color: '#3b82f6' }}>{totalResults}</strong> resultado{totalResults !== 1 ? 's' : ''} encontrado{totalResults !== 1 ? 's' : ''}
           </span>
           <span className="stat-divider">•</span>
           <span className="stat-item">
@@ -121,27 +121,37 @@ export const DocumentSummary: React.FC<DocumentSummaryProps> = ({
           </div>
           
           <div className="doc-info">
-            <h2 className="doc-title">{document.title}</h2>
+            <h2 className="doc-title" style={{ color: '#1f2937' }}>
+              {document.title || 'Sin título'}
+            </h2>
             
             <div className="doc-meta-grid">
               <div className="meta-item">
-                <span className="meta-label">📋 Número:</span>
-                <span className="meta-value">{document.number || 'N/A'}</span>
+                <span className="meta-label" style={{ color: '#6b7280' }}>📋 Número:</span>
+                <span className="meta-value" style={{ color: '#1f2937' }}>
+                  {document.number || 'N/A'}
+                </span>
               </div>
               
               <div className="meta-item">
-                <span className="meta-label">🏢 Proyecto:</span>
-                <span className="meta-value">{document.project_id || 'N/A'}</span>
+                <span className="meta-label" style={{ color: '#6b7280' }}>🏢 Proyecto:</span>
+                <span className="meta-value" style={{ color: '#1f2937' }}>
+                  {document.project_id || 'N/A'}
+                </span>
               </div>
               
               <div className="meta-item">
-                <span className="meta-label">📂 Categoría:</span>
-                <span className="meta-value">{document.category || 'Sin categoría'}</span>
+                <span className="meta-label" style={{ color: '#6b7280' }}>📂 Categoría:</span>
+                <span className="meta-value" style={{ color: '#1f2937' }}>
+                  {document.category || 'Sin categoría'}
+                </span>
               </div>
               
               <div className="meta-item">
-                <span className="meta-label">📅 Fecha:</span>
-                <span className="meta-value">{formatDate(document.date_modified)}</span>
+                <span className="meta-label" style={{ color: '#6b7280' }}>📅 Fecha:</span>
+                <span className="meta-value" style={{ color: '#1f2937' }}>
+                  {formatDate(document.date_modified)}
+                </span>
               </div>
             </div>
 
@@ -168,11 +178,11 @@ export const DocumentSummary: React.FC<DocumentSummaryProps> = ({
 
         {/* Vista previa del contenido */}
         <div className="summary-content">
-          <h3 className="content-label">
+          <h3 className="content-label" style={{ color: '#4b5563' }}>
             <span className="label-icon">👁️</span>
             Vista Previa del Contenido
           </h3>
-          <p className="content-excerpt">
+          <p className="content-excerpt" style={{ color: '#1f2937' }}>
             {getExcerpt(document.snippet)}
           </p>
         </div>
@@ -183,6 +193,18 @@ export const DocumentSummary: React.FC<DocumentSummaryProps> = ({
             <button 
               onClick={handleOpenPdf}
               className="action-btn action-primary"
+              style={{ 
+                background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                color: 'white',
+                border: 'none',
+                padding: '0.75rem 1.5rem',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                fontWeight: '600'
+              }}
             >
               <span className="btn-icon">📄</span>
               Ver Documento Completo
@@ -192,6 +214,18 @@ export const DocumentSummary: React.FC<DocumentSummaryProps> = ({
           <button 
             onClick={() => setShowDetails(!showDetails)}
             className="action-btn action-secondary"
+            style={{
+              background: 'white',
+              color: '#1f2937',
+              border: '2px solid #e5e7eb',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              fontWeight: '600'
+            }}
           >
             <span className="btn-icon">{showDetails ? '▲' : '▼'}</span>
             {showDetails ? 'Ocultar' : 'Ver'} Detalles Técnicos
