@@ -56,12 +56,21 @@ export default function App() {
       setRows(data);
       
       // Estado de éxito - Principio #3: Feedback
-      setSystemState({
-        status: 'success',
-        message: 'Búsqueda completada',
-        details: `Se encontraron ${data.length} resultados`,
-        progress: 100,
-      });
+      if (data.length === 0) {
+        setSystemState({
+          status: 'success',
+          message: 'Búsqueda completada',
+          details: 'No se encontraron resultados relevantes. Intenta con otros términos relacionados a proyectos de construcción.',
+          progress: 100,
+        });
+      } else {
+        setSystemState({
+          status: 'success',
+          message: 'Búsqueda completada',
+          details: `Se encontraron ${data.length} resultados`,
+          progress: 100,
+        });
+      }
 
       // Enfocar resultados para accesibilidad
       setTimeout(() => {
