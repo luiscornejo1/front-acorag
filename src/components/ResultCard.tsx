@@ -24,33 +24,6 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, index }) => {
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-  // Calcular nivel de relevancia basado en score
-  const getRelevanceLevel = (score: number) => {
-    if (score > 0.7) return {
-      level: 'high',
-      label: 'Muy Relevante',
-      icon: '🎯',
-      class: 'badge-high',
-      percentage: Math.round(score * 100)
-    };
-    if (score > 0.5) return {
-      level: 'medium',
-      label: 'Relevante',
-      icon: '📍',
-      class: 'badge-medium',
-      percentage: Math.round(score * 100)
-    };
-    return {
-      level: 'low',
-      label: 'Posible Match',
-      icon: '📌',
-      class: 'badge-low',
-      percentage: Math.round(score * 100)
-    };
-  };
-
-  const relevance = getRelevanceLevel(result.score);
-  
   // Formatear fecha
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return 'Fecha no disponible';
@@ -108,13 +81,6 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, index }) => {
 
   return (
     <div className="summary-card" style={{ marginBottom: '1.5rem', animationDelay: `${index * 50}ms` }}>
-      {/* Badge de relevancia */}
-      <div className={`relevance-badge ${relevance.class}`}>
-        <span className="badge-icon">{relevance.icon}</span>
-        <span className="badge-text">{relevance.label}</span>
-        <span className="badge-percentage">{relevance.percentage}%</span>
-      </div>
-
       {/* Información principal */}
       <div className="summary-main">
         <div className="doc-icon-large">
