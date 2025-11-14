@@ -4,10 +4,12 @@ import ResultsList from "./components/ResultsList";
 import ChatAssistant from "./components/ChatAssistant";
 import DocumentUploader from "./components/DocumentUploader";
 import { SystemStatus, type SystemState } from "./components/SystemStatus";
+import Login from "./components/Login";
 import { search, type SearchRow } from "./api";
 import "./App.css";
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [rows, setRows] = useState<SearchRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState<'search' | 'chat' | 'upload'>('search');
@@ -110,6 +112,11 @@ export default function App() {
   };
 
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
+  // Si no está autenticado, mostrar pantalla de login
+  if (!isAuthenticated) {
+    return <Login onLogin={() => setIsAuthenticated(true)} />;
+  }
 
   return (
     <>
