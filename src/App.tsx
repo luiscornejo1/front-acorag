@@ -1,10 +1,10 @@
 import { useState, useRef } from "react";
-import SearchBar from "./components/SearchBar";
-import ResultsList from "./components/ResultsList";
-import ChatAssistant from "./components/ChatAssistant";
-import DocumentUploader from "./components/DocumentUploader";
-import { SystemStatus, type SystemState } from "./components/SystemStatus";
-import Login from "./components/Login";
+import SearchBar from "./features/search/SearchBar";
+import ResultsList from "./features/search/ResultsList";
+import ChatAssistant from "./features/chat/ChatAssistant";
+import DocumentUploader from "./features/upload/DocumentUploader";
+import { SystemStatus, type SystemState } from "./features/system/SystemStatus";
+import Login from "./features/auth/Login";
 import { search, type SearchRow } from "./api";
 import "./App.css";
 
