@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import type { SearchRow } from '../api';
+import type { SearchRow } from '../../api';
 import './DocumentSummary.css';
 
 interface DocumentSummaryProps {

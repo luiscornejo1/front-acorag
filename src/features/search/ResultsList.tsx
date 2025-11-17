@@ -9,9 +9,9 @@
  */
 
 import { useState, useMemo } from "react";
-import type { SearchRow } from "../api";
+import type { SearchRow } from "../../api";
 import { ResultCard } from "./ResultCard";
-import { DocumentSummary } from "./DocumentSummary";
+import { DocumentSummary } from "../upload/DocumentSummary";
 import "./ResultsList.css";
 
 type SortBy = 'relevance' | 'date' | 'type' | 'title';
