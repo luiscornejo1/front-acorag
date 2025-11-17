@@ -5,11 +5,12 @@ import ChatAssistant from "./features/chat/ChatAssistant";
 import DocumentUploader from "./features/upload/DocumentUploader";
 import { SystemStatus, type SystemState } from "./features/system/SystemStatus";
 import Login from "./features/auth/Login";
-import { search, type SearchRow } from "./api";
+import { useAuth } from "./features/auth/useAuth";
+import { search, type SearchRow, type User } from "./api";
 import "./App.css";
 
 export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated, user, isLoading, login, logout } = useAuth();
   const [rows, setRows] = useState<SearchRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState<'search' | 'chat' | 'upload'>('search');
@@ -24,6 +25,10 @@ export default function App() {
     status: 'idle',
     message: 'Sistema listo',
   });
+
+  const handleLogin = (token: string, userData: User) => {
+    login(token, userData);
+  };
 
   const onSubmit = async (q: string, projectId?: string) => {
     setLoading(true);
@@ -113,9 +118,19 @@ export default function App() {
 
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
+  // Mostrar loading mientras verifica autenticación
+  if (isLoading) {
+    return (
+      <div className="loading-container" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="loading-spinner" aria-hidden="true"></div>
+        <p className="loading">Cargando...</p>
+      </div>
+    );
+  }
+
   // Si no está autenticado, mostrar pantalla de login
   if (!isAuthenticated) {
-    return <Login onLogin={() => setIsAuthenticated(true)} />;
+    return <Login onLogin={handleLogin} />;
   }
 
   return (
@@ -133,7 +148,30 @@ export default function App() {
         <SystemStatus state={systemState} />
 
         <div className="app-header">
-          <h1>Aconex RAG System</h1>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h1>Aconex RAG System</h1>
+            {user && (
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                  {user.full_name}
+                </span>
+                <button 
+                  onClick={logout}
+                  style={{
+                    padding: '8px 16px',
+                    background: 'var(--border-color)',
+                    border: 'none',
+                    borderRadius: '6px',
+                    color: 'white',
+                    cursor: 'pointer',
+                    fontSize: '0.9rem'
+                  }}
+                >
+                  Cerrar Sesión
+                </button>
+              </div>
+            )}
+          </div>
           <div className="mode-toggle" role="tablist" aria-label="Seleccionar modo de interfaz">
             <button 
               className={mode === 'search' ? 'active' : ''} 
