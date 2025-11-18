@@ -5,12 +5,14 @@ import ChatAssistant from "./features/chat/ChatAssistant";
 import DocumentUploader from "./features/upload/DocumentUploader";
 import { SystemStatus, type SystemState } from "./features/system/SystemStatus";
 import Login from "./features/auth/Login";
+import Register from "./features/auth/Register";
 import { useAuth } from "./features/auth/useAuth";
 import { search, type SearchRow, type User } from "./api";
 import "./App.css";
 
 export default function App() {
   const { isAuthenticated, user, isLoading, login, logout } = useAuth();
+  const [showRegister, setShowRegister] = useState(false);
   const [rows, setRows] = useState<SearchRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState<'search' | 'chat' | 'upload'>('search');
@@ -128,9 +130,22 @@ export default function App() {
     );
   }
 
-  // Si no está autenticado, mostrar pantalla de login
+  // Si no está autenticado, mostrar pantalla de login o registro
   if (!isAuthenticated) {
-    return <Login onLogin={handleLogin} />;
+    if (showRegister) {
+      return (
+        <Register 
+          onRegister={handleLogin}
+          onSwitchToLogin={() => setShowRegister(false)}
+        />
+      );
+    }
+    return (
+      <Login 
+        onLogin={handleLogin}
+        onSwitchToRegister={() => setShowRegister(true)}
+      />
+    );
   }
 
   return (
