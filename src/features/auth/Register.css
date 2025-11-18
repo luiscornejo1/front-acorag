@@ -1,14 +1,10 @@
 /**
- * Login.css - Pantalla de Login
+ * Register.css - Pantalla de Registro
  * 
- * Consistente con el sistema de diseño del resto del frontend:
- * - Paleta de colores oscura (negro/gris/azul)
- * - Variables CSS del design system
- * - Tipografía Inter
- * - Transiciones suaves
+ * Consistente con Login.css y el sistema de diseño del frontend
  */
 
-.login-container {
+.register-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -20,11 +16,11 @@
 }
 
 /* Efecto de fondo sutil */
-.login-container::before {
+.register-container::before {
   content: '';
   position: absolute;
   top: -50%;
-  right: -50%;
+  left: -50%;
   width: 100%;
   height: 100%;
   background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
@@ -36,14 +32,14 @@
   50% { opacity: 0.6; transform: scale(1.1); }
 }
 
-.login-card {
+.register-card {
   background: var(--bg-secondary, #111111);
   border: 1px solid var(--border-color, #333333);
   border-radius: var(--radius-lg, 12px);
   box-shadow: var(--shadow-md),
               0 0 0 1px rgba(59, 130, 246, 0.1);
   width: 100%;
-  max-width: 420px;
+  max-width: 450px;
   padding: var(--spacing-2xl, 40px);
   animation: slideUp 0.4s ease-out;
   position: relative;
@@ -61,12 +57,12 @@
   }
 }
 
-.login-header {
+.register-header {
   text-align: center;
   margin-bottom: var(--spacing-xl, 32px);
 }
 
-.login-header h1 {
+.register-header h1 {
   font-size: var(--font-size-2xl, 1.8rem);
   font-weight: var(--font-weight-light, 300);
   color: var(--text-primary, #ffffff);
@@ -79,17 +75,17 @@
   letter-spacing: -0.5px;
 }
 
-.login-header p {
+.register-header p {
   font-size: var(--font-size-sm, 0.9rem);
   color: var(--text-secondary, #cccccc);
   margin: 0;
   font-weight: var(--font-weight-normal, 400);
 }
 
-.login-form {
+.register-form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg, 20px);
+  gap: var(--spacing-md, 18px);
 }
 
 .form-group {
@@ -127,12 +123,34 @@
   color: var(--text-tertiary, #666666);
 }
 
-.form-group input:hover {
+.form-group input:hover:not(:disabled) {
   border-color: var(--border-hover, #444444);
 }
 
-.login-button {
-  margin-top: var(--spacing-sm, 8px);
+.form-group input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error-message {
+  padding: var(--spacing-sm, 12px);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--error-color, #ef4444);
+  border-radius: var(--radius-md, 8px);
+  color: var(--error-color, #ef4444);
+  font-size: var(--font-size-sm, 0.9rem);
+  margin-top: var(--spacing-xs, 4px);
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.register-button {
+  margin-top: var(--spacing-sm, 12px);
   padding: var(--spacing-sm, 14px);
   font-size: var(--font-size-base, 1rem);
   font-weight: var(--font-weight-semibold, 600);
@@ -146,75 +164,35 @@
   font-family: 'Inter', sans-serif;
 }
 
-.login-button:hover {
+.register-button:hover:not(:disabled) {
   background: var(--primary-hover, #2563eb);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
 }
 
-.login-button:active {
+.register-button:active:not(:disabled) {
   transform: translateY(0);
 }
 
-.login-button:focus-visible {
+.register-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.register-button:focus-visible {
   outline: 2px solid white;
   outline-offset: 2px;
 }
 
-.login-button:disabled {
-  background: var(--border-color, #333333);
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-  opacity: 0.6;
-}
-
-.error-message {
-  padding: var(--spacing-sm, 12px);
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  border-radius: var(--radius-md, 8px);
-  color: #ef4444;
-  font-size: var(--font-size-sm, 0.9rem);
-  text-align: center;
-  animation: shake 0.3s ease-in-out;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-10px); }
-  75% { transform: translateX(10px); }
-}
-
-.login-toggle {
-  margin-top: var(--spacing-md, 16px);
-  text-align: center;
-}
-
-.toggle-button {
-  background: none;
-  border: none;
-  color: var(--primary-color, #3b82f6);
-  font-size: var(--font-size-sm, 0.9rem);
-  cursor: pointer;
-  transition: color var(--transition-fast, 0.2s ease);
-  font-family: 'Inter', sans-serif;
-  padding: var(--spacing-xs, 8px);
-  text-decoration: underline;
-}
-
-.toggle-button:hover {
-  color: var(--primary-hover, #2563eb);
-}
-
-.login-footer {
+.register-footer {
   margin-top: var(--spacing-lg, 24px);
   padding-top: var(--spacing-lg, 24px);
   border-top: 1px solid var(--border-color, #333333);
   text-align: center;
 }
 
-.login-footer p {
+.register-footer p {
   font-size: var(--font-size-sm, 0.9rem);
   color: var(--text-secondary, #cccccc);
   margin: 0;
@@ -241,42 +219,30 @@
   cursor: not-allowed;
 }
 
-.error-message {
-  padding: var(--spacing-sm, 12px);
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid var(--error-color, #ef4444);
-  border-radius: var(--radius-md, 8px);
-  color: var(--error-color, #ef4444);
-  font-size: var(--font-size-sm, 0.9rem);
-  margin-top: var(--spacing-xs, 4px);
-  animation: shake 0.3s ease;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
-}
-
 /* Responsive */
 @media (max-width: 480px) {
-  .login-card {
+  .register-card {
     padding: var(--spacing-xl, 32px) var(--spacing-lg, 24px);
   }
 
-  .login-header h1 {
+  .register-header h1 {
     font-size: var(--font-size-xl, 1.5rem);
+  }
+
+  .register-form {
+    gap: var(--spacing-md, 16px);
   }
 }
 
 /* Reducir animaciones - Accesibilidad */
 @media (prefers-reduced-motion: reduce) {
-  .login-card,
-  .login-container::before {
+  .register-card,
+  .register-container::before,
+  .error-message {
     animation: none;
   }
 
-  .login-button:hover {
+  .register-button:hover {
     transform: none;
   }
 }

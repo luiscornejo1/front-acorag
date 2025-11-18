@@ -1,16 +1,15 @@
 import { useState, type FormEvent } from 'react';
-import { login as apiLogin, register as apiRegister, type User } from '../../api';
+import { login as apiLogin, type User } from '../../api';
 import './Login.css';
 
 interface LoginProps {
   onLogin: (token: string, user: User) => void;
+  onSwitchToRegister?: () => void;
 }
 
-export default function Login({ onLogin }: LoginProps) {
-  const [isRegisterMode, setIsRegisterMode] = useState(false);
+export default function Login({ onLogin, onSwitchToRegister }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [fullName, setFullName] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -20,22 +19,11 @@ export default function Login({ onLogin }: LoginProps) {
     setIsLoading(true);
 
     try {
-      if (isRegisterMode) {
-        // Registro
-        const response = await apiRegister({
-          email,
-          password,
-          full_name: fullName
-        });
-        onLogin(response.access_token, response.user);
-      } else {
-        // Login
-        const response = await apiLogin({
-          email,
-          password
-        });
-        onLogin(response.access_token, response.user);
-      }
+      const response = await apiLogin({
+        email,
+        password
+      });
+      onLogin(response.access_token, response.user);
     } catch (err: any) {
       // Manejar errores de la API
       if (err.response) {
@@ -48,44 +36,15 @@ export default function Login({ onLogin }: LoginProps) {
     }
   };
 
-  const toggleMode = () => {
-    setIsRegisterMode(!isRegisterMode);
-    setError('');
-    setEmail('');
-    setPassword('');
-    setFullName('');
-  };
-
   return (
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
           <h1>Aconex RAG System</h1>
-          <p>
-            {isRegisterMode 
-              ? 'Crea una cuenta para continuar' 
-              : 'Ingresa tus credenciales para continuar'}
-          </p>
+          <p>Ingresa tus credenciales para continuar</p>
         </div>
         
         <form onSubmit={handleSubmit} className="login-form">
-          {isRegisterMode && (
-            <div className="form-group">
-              <label htmlFor="fullname">Nombre Completo</label>
-              <input
-                type="text"
-                id="fullname"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Juan Pérez"
-                required
-                autoComplete="name"
-                autoFocus={isRegisterMode}
-                minLength={2}
-              />
-            </div>
-          )}
-
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -96,7 +55,8 @@ export default function Login({ onLogin }: LoginProps) {
               placeholder="tu@email.com"
               required
               autoComplete="email"
-              autoFocus={!isRegisterMode}
+              autoFocus
+              disabled={isLoading}
             />
           </div>
 
@@ -107,10 +67,10 @@ export default function Login({ onLogin }: LoginProps) {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder={isRegisterMode ? 'Mínimo 6 caracteres' : 'Tu contraseña'}
+              placeholder="Tu contraseña"
               required
-              autoComplete={isRegisterMode ? 'new-password' : 'current-password'}
-              minLength={6}
+              autoComplete="current-password"
+              disabled={isLoading}
             />
           </div>
 
@@ -125,25 +85,25 @@ export default function Login({ onLogin }: LoginProps) {
             className="login-button"
             disabled={isLoading}
           >
-            {isLoading 
-              ? 'Procesando...' 
-              : isRegisterMode 
-                ? 'Registrarse' 
-                : 'Iniciar Sesión'}
+            {isLoading ? 'Procesando...' : 'Iniciar Sesión'}
           </button>
         </form>
 
-        <div className="login-toggle">
-          <button 
-            type="button" 
-            onClick={toggleMode}
-            className="toggle-button"
-          >
-            {isRegisterMode 
-              ? '¿Ya tienes cuenta? Inicia sesión' 
-              : '¿No tienes cuenta? Regístrate'}
-          </button>
-        </div>
+        {onSwitchToRegister && (
+          <div className="login-footer">
+            <p>
+              ¿No tienes cuenta?{' '}
+              <button 
+                type="button" 
+                onClick={onSwitchToRegister}
+                className="switch-button"
+                disabled={isLoading}
+              >
+                Regístrate
+              </button>
+            </p>
+          </div>
+        )}
 
         <div className="login-footer">
           <p>Sistema de búsqueda y gestión documental</p>
