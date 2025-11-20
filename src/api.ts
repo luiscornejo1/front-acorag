@@ -6,7 +6,8 @@ const createAPI = () => {
   
   return ky.create({ 
     prefixUrl: import.meta.env.VITE_API_URL || "http://localhost:8000",
-    headers: token ? { Authorization: `Bearer ${token}` } : {}
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    timeout: 60000  // 60 segundos de timeout (la búsqueda puede tardar ~6-10 segundos)
   });
 };
 
