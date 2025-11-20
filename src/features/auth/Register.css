@@ -15,6 +15,28 @@
   overflow: hidden;
 }
 
+.back-to-landing {
+  position: absolute;
+  top: var(--spacing-lg, 24px);
+  left: var(--spacing-lg, 24px);
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
+  background: transparent;
+  border: 1px solid var(--border-color, #333333);
+  border-radius: var(--radius-md, 8px);
+  color: var(--text-secondary, #cccccc);
+  font-weight: var(--font-weight-medium, 500);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.2s ease);
+  font-size: var(--font-size-sm, 0.9rem);
+  z-index: 10;
+}
+
+.back-to-landing:hover {
+  background: var(--bg-secondary, #111111);
+  color: var(--text-primary, #ffffff);
+  border-color: var(--border-hover, #444444);
+}
+
 /* Efecto de fondo sutil */
 .register-container::before {
   content: '';

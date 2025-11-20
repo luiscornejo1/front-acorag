@@ -33,7 +33,7 @@ export const DocumentSummary: React.FC<DocumentSummaryProps> = ({
     }
   };
 
-  // Obtener icon por tipo de documento
+  // Obtener ícono por tipo de documento
   const getDocIcon = (type: string) => {
     const icons: { [key: string]: string } = {
       'Informe': '📊',
@@ -49,7 +49,7 @@ export const DocumentSummary: React.FC<DocumentSummaryProps> = ({
     return icons[type] || icons.default;
   };
 
-  // Extraer extracto relevante (primeras 250 chars)
+  // Extraer extracto relevante (primeros 250 caracteres)
   const getExcerpt = (snippet: string | null) => {
     if (!snippet) return 'No hay contenido disponible para vista previa.';
     return snippet.length > 250 

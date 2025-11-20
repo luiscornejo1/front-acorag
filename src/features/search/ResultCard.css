@@ -1,13 +1,12 @@
 /**
  * ResultCard Styles
  * 
- * Principios aplicados:
+ * Principios 
  * #4: Consistencia Visual - Uso de variables CSS
  * #8: Affordances Claras - Estados hover interactivos
  * #9: Mejoras en UX - Transiciones suaves
  * #10: Jerarquía Visual Clara
  */
-
 .result-card {
   padding: var(--spacing-lg, 1.5rem);
   margin: var(--spacing-md, 1rem) 0;

@@ -5,9 +5,10 @@ import './Login.css';
 interface LoginProps {
   onLogin: (token: string, user: User) => void;
   onSwitchToRegister?: () => void;
+  onBackToLanding?: () => void;
 }
 
-export default function Login({ onLogin, onSwitchToRegister }: LoginProps) {
+export default function Login({ onLogin, onSwitchToRegister, onBackToLanding }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -38,6 +39,11 @@ export default function Login({ onLogin, onSwitchToRegister }: LoginProps) {
 
   return (
     <div className="login-container">
+      {onBackToLanding && (
+        <button onClick={onBackToLanding} className="back-to-landing" aria-label="Volver al inicio">
+          ← Volver
+        </button>
+      )}
       <div className="login-card">
         <div className="login-header">
           <h1>Aconex RAG System</h1>
