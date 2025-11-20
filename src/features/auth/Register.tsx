@@ -4,6 +4,7 @@ import './Register.css';
 interface RegisterProps {
   onRegister: (token: string, user: User) => void;
   onSwitchToLogin: () => void;
+  onBackToLanding?: () => void;
 }
 
 interface User {
@@ -13,7 +14,7 @@ interface User {
   created_at: string;
 }
 
-export default function Register({ onRegister, onSwitchToLogin }: RegisterProps) {
+export default function Register({ onRegister, onSwitchToLogin, onBackToLanding }: RegisterProps) {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -94,6 +95,11 @@ export default function Register({ onRegister, onSwitchToLogin }: RegisterProps)
 
   return (
     <div className="register-container">
+      {onBackToLanding && (
+        <button onClick={onBackToLanding} className="back-to-landing" aria-label="Volver al inicio">
+          ← Volver
+        </button>
+      )}
       <div className="register-card">
         <div className="register-header">
           <h1>Crear Cuenta</h1>

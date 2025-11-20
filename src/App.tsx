@@ -6,12 +6,14 @@ import DocumentUploader from "./features/upload/DocumentUploader";
 import { SystemStatus, type SystemState } from "./features/system/SystemStatus";
 import Login from "./features/auth/Login";
 import Register from "./features/auth/Register";
+import LandingPage from "./features/landing/LandingPage";
 import { useAuth } from "./features/auth/useAuth";
 import { search, type SearchRow, type User } from "./api";
 import "./App.css";
 
 export default function App() {
   const { isAuthenticated, user, isLoading, login, logout } = useAuth();
+  const [showLanding, setShowLanding] = useState(true);
   const [showRegister, setShowRegister] = useState(false);
   const [rows, setRows] = useState<SearchRow[]>([]);
   const [loading, setLoading] = useState(false);
@@ -130,27 +132,54 @@ export default function App() {
     );
   }
 
-  // Si no está autenticado, mostrar pantalla de login o registro
+  // Si no está autenticado, mostrar landing, login o registro
   if (!isAuthenticated) {
+    // Mostrar landing page primero
+    if (showLanding) {
+      return (
+        <LandingPage 
+          onGetStarted={() => setShowLanding(false)}
+          onSignUp={() => {
+            setShowLanding(false);
+            setShowRegister(true);
+          }}
+        />
+      );
+    }
+
+    // Mostrar registro
     if (showRegister) {
       return (
         <Register 
           onRegister={handleLogin}
-          onSwitchToLogin={() => setShowRegister(false)}
+          onSwitchToLogin={() => {
+            setShowRegister(false);
+            setShowLanding(false);
+          }}
+          onBackToLanding={() => {
+            setShowRegister(false);
+            setShowLanding(true);
+          }}
         />
       );
     }
+
+    // Mostrar login
     return (
       <Login 
         onLogin={handleLogin}
-        onSwitchToRegister={() => setShowRegister(true)}
+        onSwitchToRegister={() => {
+          setShowRegister(true);
+          setShowLanding(false);
+        }}
+        onBackToLanding={() => setShowLanding(true)}
       />
     );
   }
 
   return (
     <>
-      {/* Skip Links - Principio #5: Accesibilidad */}
+      {/* Enlaces de salto - Principio #5: Accesibilidad */}
       <a href="#main-content" className="skip-link">
         Saltar al contenido principal
       </a>

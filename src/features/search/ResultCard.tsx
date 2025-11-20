@@ -38,7 +38,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, index }) => {
     }
   };
 
-  // Obtener icono por tipo
+  // Obtener ícono por tipo
   const getDocIcon = (type: string) => {
     const icons: { [key: string]: string } = {
       'Informe': '📊',

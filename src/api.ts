@@ -11,7 +11,7 @@ const createAPI = () => {
   });
 };
 
-// Función helper para actualizar la instancia cuando cambie el token
+// Función auxiliar para actualizar la instancia cuando cambie el token
 export const API = {
   get instance() {
     return createAPI();
