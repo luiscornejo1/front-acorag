@@ -48,7 +48,7 @@ export const SystemStatus: React.FC<SystemStatusProps> = ({ state }) => {
     }
   };
 
-  // No mostrar si está en idle
+  // No mostrar si está inactivo
   if (state.status === 'idle') {
     return null;
   }

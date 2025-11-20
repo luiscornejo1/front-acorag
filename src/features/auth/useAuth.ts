@@ -10,11 +10,11 @@ export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Al cargar, verificar si hay token guardado
+  // Al cargar, verifica si hay token guardado
   useEffect(() => {
     const token = localStorage.getItem('auth_token');
     if (token) {
-      // Verificar que el token sea válido
+      // Verifica que el token sea válido
       getCurrentUser()
         .then((userData) => {
           setUser(userData);
