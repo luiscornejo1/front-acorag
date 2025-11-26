@@ -23,30 +23,47 @@ export default function Register({ onRegister, onSwitchToLogin, onBackToLanding 
   const [loading, setLoading] = useState(false);
 
   const validateForm = (): boolean => {
+    // Validar nombre: solo letras, espacios y acentos, 2-50 caracteres
     if (!fullName.trim()) {
       setError('El nombre es requerido');
       return false;
     }
-    if (fullName.trim().length < 2) {
-      setError('El nombre debe tener al menos 2 caracteres');
+    const nameRegex = /^[a-zA-ZáéíóúñÁÉÍÓÚÑ\s]{2,50}$/;
+    if (!nameRegex.test(fullName.trim())) {
+      setError('El nombre debe contener solo letras y espacios (2-50 caracteres)');
       return false;
     }
+
+    // Validar email: dominio debe tener mínimo 3 caracteres después del @
     if (!email.trim()) {
       setError('El email es requerido');
       return false;
     }
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      setError('Email inválido');
+    const emailRegex = /^[^\s@]+@[^\s@]{3,}\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      setError('Email inválido. El dominio debe tener al menos 3 caracteres');
       return false;
     }
+
+    // Validar contraseña: mínimo 7 caracteres, 1 mayúscula, 1 carácter especial
     if (!password) {
       setError('La contraseña es requerida');
       return false;
     }
-    if (password.length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres');
+    if (password.length < 7) {
+      setError('La contraseña debe tener al menos 7 caracteres');
       return false;
     }
+    if (!/[A-Z]/.test(password)) {
+      setError('La contraseña debe contener al menos una letra mayúscula');
+      return false;
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>_\-+=[\]\\;'/`~]/.test(password)) {
+      setError('La contraseña debe contener al menos un carácter especial (!@#$%^&*...)');
+      return false;
+    }
+
+    // Validar coincidencia de contraseñas
     if (password !== confirmPassword) {
       setError('Las contraseñas no coinciden');
       return false;
@@ -143,7 +160,7 @@ export default function Register({ onRegister, onSwitchToLogin, onBackToLanding 
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Mínimo 6 caracteres"
+              placeholder="Mínimo 7 caracteres, 1 mayúscula, 1 especial"
               required
               autoComplete="new-password"
               disabled={loading}
