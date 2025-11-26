@@ -1,9 +1,3 @@
-/**
- * Register.css - Pantalla de Registro
- * 
- * Consistente con Login.css y el sistema de diseño del frontend
- */
-
 .register-container {
   min-height: 100vh;
   display: flex;
